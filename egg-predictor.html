@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>洛克王国孵蛋预测器</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #fbd84a 0%, #f9a826 100%);
+            min-height: 100vh;
+            padding: 15px;
+            color: #5c3a21;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-top: 10px;
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            color: #ffffff;
+            -webkit-text-stroke: 2px #5c3a21;
+            text-shadow: 4px 4px 0px rgba(92, 58, 33, 0.15);
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            transform: rotate(-2deg);
+            display: inline-block;
+            font-family: 'ZCOOL KuaiLe', cursive;
+        }
+
+        .header p {
+            font-size: 0.95em;
+            color: #5c3a21;
+            background: #ffffff;
+            display: inline-block;
+            padding: 6px 20px;
+            border-radius: 25px;
+            border: 2.5px solid #5c3a21;
+            box-shadow: 3px 3px 0px rgba(92, 58, 33, 0.1);
+            transform: rotate(1deg);
+        }
+
+        .card {
+            background: #fffdf7;
+            border-radius: 18px;
+            padding: 24px;
+            border: 3px solid #5c3a21;
+            box-shadow: 6px 6px 0px rgba(92, 58, 33, 0.15);
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-2deg);
+            width: 100px;
+            height: 28px;
+            background-color: rgba(255, 255, 255, 0.7);
+            border: 2px dashed #5c3a21;
+            box-shadow: 1px 1px 3px rgba(0,0,0,0.05);
+            z-index: 2;
+        }
+
+        .input-group {
+            margin-bottom: 18px;
+        }
+
+        .input-group label {
+            display: inline-block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #5c3a21;
+            font-size: 0.95em;
+            background: linear-gradient(135deg, #b2ebf2 0%, #80deea 100%);
+            padding: 4px 12px;
+            border-radius: 10px;
+            border: 2px solid #5c3a21;
+            transform: rotate(-1deg);
+            box-shadow: 2px 2px 0px rgba(92, 58, 33, 0.1);
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2.5px solid #dbcfb4;
+            border-radius: 12px;
+            font-size: 0.95em;
+            transition: all 0.2s ease;
+            background: #ffffff;
+            color: #5c3a21;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.04);
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #f9a826;
+            box-shadow: 0 0 0 3px rgba(249, 168, 38, 0.25), inset 0 1px 3px rgba(0,0,0,0.04);
+        }
+
+        .input-group input::placeholder {
+            color: #bcaaa4;
+        }
+
+        .slider-container {
+            margin-top: 8px;
+            padding: 0 4px;
+        }
+
+        .slider-value {
+            text-align: center;
+            font-size: 0.85em;
+            color: #5c3a21;
+            margin-bottom: 4px;
+            font-weight: 500;
+            background: #fff9c4;
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 6px;
+            border: 1px solid #5c3a21;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 8px;
+            background: linear-gradient(to right, #fff9c4, #f9a826);
+            border-radius: 4px;
+            outline: none;
+            cursor: pointer;
+            border: 2px solid #5c3a21;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            background: #ff6b6b;
+            border: 3px solid #5c3a21;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            transition: transform 0.1s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 22px;
+            height: 22px;
+            background: #ff6b6b;
+            border: 3px solid #5c3a21;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .btn-predict {
+            width: 100%;
+            padding: 14px 24px;
+            background: linear-gradient(135deg, #8bc34a 0%, #7cb342 100%);
+            color: #ffffff;
+            border: 3px solid #33691e;
+            border-radius: 16px;
+            font-size: 1.15em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            margin-top: 12px;
+            box-shadow: 0 6px 0px #33691e, 0 10px 15px rgba(0,0,0,0.15);
+            text-shadow: 1px 1px 0px #33691e;
+        }
+
+        .btn-predict:hover {
+            transform: translateY(2px);
+            box-shadow: 0 4px 0px #33691e, 0 8px 12px rgba(0,0,0,0.15);
+            background: linear-gradient(135deg, #9ccc65 0%, #8bc34a 100%);
+        }
+
+        .btn-predict:active {
+            transform: translateY(6px);
+            box-shadow: 0 0px 0px #33691e;
+        }
+
+        .result {
+            display: none;
+            animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.92) translateY(15px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .result-header {
+            text-align: center;
+            margin-bottom: 18px;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+            color: #ffffff;
+            border-radius: 14px;
+            font-size: 1.05em;
+            border: 2.5px solid #5c3a21;
+            box-shadow: 3px 3px 0px rgba(92, 58, 33, 0.15);
+            text-shadow: 1px 1px 0px #5c3a21;
+            transform: rotate(1deg);
+            font-weight: 600;
+        }
+
+        .result-content {
+            display: grid;
+            gap: 14px;
+        }
+
+        .result-item {
+            padding: 14px;
+            background: #ffffff;
+            border-radius: 14px;
+            border: 2.5px solid #5c3a21;
+            box-shadow: 3px 3px 0px rgba(92, 58, 33, 0.12);
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            gap: 14px;
+            align-items: center;
+        }
+
+        .result-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 12px;
+            height: 100%;
+            background: linear-gradient(135deg, #ff7043 0%, #ff5722 100%);
+            border-right: 2.5px solid #5c3a21;
+        }
+
+        .result-item:hover {
+            transform: translateY(-3px) rotate(-0.5deg);
+            box-shadow: 5px 5px 0px rgba(92, 58, 33, 0.18);
+        }
+
+        .creature-img {
+            width: 75px;
+            height: 75px;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 2px solid #5c3a21;
+            background: #fff9c4;
+            margin-left: 8px;
+            box-shadow: 2px 2px 0px rgba(92, 58, 33, 0.1);
+        }
+
+        .creature-details {
+            flex: 1;
+        }
+
+        .result-item .name {
+            font-size: 1.15em;
+            color: #5c3a21;
+            margin-bottom: 10px;
+            padding-left: 0;
+            display: inline-block;
+            border-bottom: 2.5px dashed #ff9800;
+            font-weight: 600;
+        }
+
+        .result-item .info {
+            display: flex;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding-left: 0;
+        }
+
+        .result-item .info span {
+            background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%);
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-size: 0.85em;
+            color: #5c3a21;
+            border: 2px solid #5c3a21;
+            box-shadow: 1.5px 1.5px 0px rgba(92, 58, 33, 0.1);
+            font-weight: 500;
+        }
+
+        .range-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%);
+            color: #2e7d32;
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-size: 0.85em;
+            margin-top: 12px;
+            margin-left: 0;
+            border: 2px solid #2e7d32;
+            box-shadow: 1.5px 1.5px 0px rgba(46, 125, 50, 0.15);
+            font-weight: 600;
+        }
+
+        .note {
+            background: linear-gradient(135deg, #ffe082 0%, #ffd54f 100%);
+            border: 2.5px dashed #5c3a21;
+            border-radius: 14px;
+            padding: 16px;
+            margin-top: 20px;
+            color: #5c3a21;
+            transform: rotate(-1deg);
+        }
+
+        .note h4 {
+            margin-bottom: 8px;
+            font-size: 1em;
+            display: inline-block;
+            background: #ffca28;
+            padding: 4px 10px;
+            border-radius: 8px;
+            border: 2px solid #5c3a21;
+            font-weight: 600;
+        }
+
+        .note p {
+            margin-bottom: 6px;
+            line-height: 1.5;
+            font-size: 0.85em;
+        }
+
+        .error {
+            display: none;
+            background: linear-gradient(135deg, #ffab91 0%, #ff8a65 100%);
+            border: 2.5px solid #d84315;
+            color: #bf360c;
+            padding: 12px 16px;
+            border-radius: 14px;
+            text-align: center;
+            font-size: 0.95em;
+            box-shadow: 3px 3px 0px rgba(216, 67, 21, 0.15);
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        .error.show {
+            display: block;
+            animation: shake 0.35s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px) rotate(-2deg); }
+            75% { transform: translateX(10px) rotate(2deg); }
+        }
+
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.6em; }
+            .header p { font-size: 0.85em; padding: 5px 15px; }
+            .card { padding: 18px; }
+            .result-item { padding: 12px; gap: 12px; }
+            .creature-img { width: 65px; height: 65px; }
+            .result-item .name { font-size: 1em; }
+            .result-item .info span { font-size: 0.8em; padding: 5px 10px; }
+            .btn-predict { font-size: 1em; padding: 12px 18px; }
+            .input-group label { font-size: 0.9em; padding: 3px 10px; }
+            .input-group input { padding: 10px 14px; font-size: 0.9em; }
+            .slider-value { font-size: 0.8em; }
+            input[type="range"]::-webkit-slider-thumb { width: 20px; height: 20px; }
+            input[type="range"]::-moz-range-thumb { width: 20px; height: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🥚 洛克王国孵蛋预测器</h1>
+            <p>输入你的精灵蛋信息，预测孵化结果！</p>
+        </div>
+
+        <div class="card">
+            <div class="input-group">
+                <label for="length">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 5px; transform: rotate(-45deg);"><path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0Z"/><path d="m14.5 12.5 2-2"/><path d="m11.5 9.5 2-2"/><path d="m8.5 6.5 2-2"/><path d="m17.5 15.5 2-2"/></svg>
+                    精灵蛋尺寸
+                </label>
+                <div class="input-wrapper">
+                    <input type="number" id="length" placeholder="例如：0.2、0.25、0.3" step="0.01" min="0">
+                </div>
+                <div class="slider-container">
+                    <div class="slider-value" id="lengthValue">0.00</div>
+                    <input type="range" id="lengthSlider" min="0.1" max="0.8" step="0.01" value="0.2">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="weight">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 5px;"><path d="M12 2a4 4 0 0 0-4 4v2H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2h-2V6a4 4 0 0 0-4-4zm0 2a2 2 0 0 1 2 2v2h-4V6a2 2 0 0 1 2-2z"/></svg>
+                    精灵蛋重量
+                </label>
+                <div class="input-wrapper">
+                    <input type="number" id="weight" placeholder="例如：0.5、2.5、10" step="0.001" min="0">
+                </div>
+                <div class="slider-container">
+                    <div class="slider-value" id="weightValue">0.5</div>
+                    <input type="range" id="weightSlider" min="0" max="10" step="0.001" value="0.5">
+                </div>
+            </div>
+
+            <div class="error" id="error"></div>
+
+            <button class="btn-predict" onclick="predict()">🔮 开始预测</button>
+        </div>
+
+        <div class="card result" id="result">
+            <div class="result-header" id="resultHeader"></div>
+            <div class="result-content" id="resultContent"></div>
+            <div class="note">
+                <h4>💡 温馨提示</h4>
+                <p>1. 重量和尺寸需同时匹配才能获得准确预测</p>
+                <p>2. 输入重量和尺寸可以缩小预测范围</p>
+                <p>3. 请确保输入的数值准确，以获得最佳预测结果</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 洛克王国孵蛋数据库 - 96种精灵
+        const eggData = [
+            { name: '小灵面', weightRange: { min: 0.038, max: 0.052 }, lengthRange: { min: 0.17, max: 0.21 } },
+            { name: '蒲公英', weightRange: { min: 0.04, max: 0.12 }, lengthRange: { min: 0.13, max: 0.21 } },
+            { name: '旋叶虫', weightRange: { min: 0.057, max: 0.09 }, lengthRange: { min: 0.04, max: 0.06 } },
+            { name: '逗逗', weightRange: { min: 0.21, max: 0.32 }, lengthRange: { min: 0.13, max: 0.17 } },
+            { name: '梦游', weightRange: { min: 0.3, max: 0.4 }, lengthRange: { min: 0.21, max: 0.25 } },
+            { name: '画精灵', weightRange: { min: 0.36, max: 0.56 }, lengthRange: { min: 0.12, max: 0.16 } },
+            { name: '菇菇丁', weightRange: { min: 0.38, max: 0.5 }, lengthRange: { min: 0.11, max: 0.15 } },
+            { name: '豆丁鱼', weightRange: { min: 0.44, max: 0.6 }, lengthRange: { min: 0.13, max: 0.18 } },
+            { name: '小鹬', weightRange: { min: 0.49, max: 0.7 }, lengthRange: { min: 0.11, max: 0.13 } },
+            { name: '地鼠', weightRange: { min: 0.64, max: 0.88 }, lengthRange: { min: 0.2, max: 0.26 } },
+            { name: '哭哭菇', weightRange: { min: 0.7, max: 1.24 }, lengthRange: { min: 0.14, max: 0.20 } },
+            { name: '小草虫', weightRange: { min: 0.75, max: 1.34 }, lengthRange: { min: 0.20, max: 0.28 } },
+            { name: '螺旋帕帕', weightRange: { min: 0.83, max: 1.43 }, lengthRange: { min: 0.15, max: 0.18 } },
+            { name: '闪电环', weightRange: { min: 0.89, max: 1.2 }, lengthRange: { min: 0.16, max: 0.19 } },
+            { name: '刺轮砣', weightRange: { min: 0.94, max: 1.57 }, lengthRange: { min: 0.08, max: 0.13 } },
+            { name: '雪绒鸟', weightRange: { min: 0.97, max: 1.8 }, lengthRange: { min: 0.16, max: 0.21 } },
+            { name: '公平鸽', weightRange: { min: 0.99, max: 1.54 }, lengthRange: { min: 0.2, max: 0.25 } },
+            { name: '花怨蝶', weightRange: { min: 1.01, max: 1.56 }, lengthRange: { min: 0.25, max: 0.28 } },
+            { name: '毛毛', weightRange: { min: 1.11, max: 1.78 }, lengthRange: { min: 0.13, max: 0.19 } },
+            { name: '伊贝尔', weightRange: { min: 1.19, max: 1.65 }, lengthRange: { min: 0.19, max: 0.26 } },
+            { name: '小黑猫', weightRange: { min: 1.19, max: 1.78 }, lengthRange: { min: 0.23, max: 0.27 } },
+            { name: '书卷虫', weightRange: { min: 1.24, max: 1.44 }, lengthRange: { min: 0.15, max: 0.17 } },
+            { name: '海枝枝', weightRange: { min: 1.24, max: 2.5 }, lengthRange: { min: 0.32, max: 0.35 } },
+            { name: '恶魔叮', weightRange: { min: 1.26, max: 1.56 }, lengthRange: { min: 0.17, max: 0.22 } },
+            { name: '绿翼鸟', weightRange: { min: 1.27, max: 1.69 }, lengthRange: { min: 0.21, max: 0.24 } },
+            { name: '优优', weightRange: { min: 1.28, max: 1.66 }, lengthRange: { min: 0.18, max: 0.23 } },
+            { name: '圆眼蜘蛛', weightRange: { min: 1.28, max: 1.98 }, lengthRange: { min: 0.2, max: 0.28 } },
+            { name: '矮脚爬爬', weightRange: { min: 1.3, max: 1.71 }, lengthRange: { min: 0.13, max: 0.18 } },
+            { name: '小电企鹅', weightRange: { min: 1.3, max: 2.0 }, lengthRange: { min: 0.19, max: 0.23 } },
+            { name: '号儿鱼', weightRange: { min: 1.4, max: 2.02 }, lengthRange: { min: 0.13, max: 0.17 } },
+            { name: '格兰种子', weightRange: { min: 1.45, max: 2.05 }, lengthRange: { min: 0.18, max: 0.24 } },
+            { name: '菊花梨', weightRange: { min: 1.47, max: 1.78 }, lengthRange: { min: 0.27, max: 0.3 } },
+            { name: '奇丽草', weightRange: { min: 1.54, max: 2.06 }, lengthRange: { min: 0.17, max: 0.2 } },
+            { name: '蹦蹦种子', weightRange: { min: 1.54, max: 2.12 }, lengthRange: { min: 0.2, max: 0.27 } },
+            { name: '草头鸭', weightRange: { min: 1.54, max: 2.58 }, lengthRange: { min: 0.21, max: 0.27 } },
+            { name: '果冻', weightRange: { min: 1.55, max: 2.23 }, lengthRange: { min: 0.13, max: 0.15 } },
+            { name: '一窝蜂', weightRange: { min: 1.56, max: 2.16 }, lengthRange: { min: 0.17, max: 0.22 } },
+            { name: '绿耳松鼠', weightRange: { min: 1.57, max: 2.38 }, lengthRange: { min: 0.22, max: 0.28 } },
+            { name: '丢丢', weightRange: { min: 1.57, max: 2.41 }, lengthRange: { min: 0.15, max: 0.21 } },
+            { name: '小箱怪', weightRange: { min: 1.59, max: 2.35 }, lengthRange: { min: 0.14, max: 0.19 } },
+            { name: '乌达', weightRange: { min: 1.61, max: 2.28 }, lengthRange: { min: 0.19, max: 0.23 } },
+            { name: '呆小路', weightRange: { min: 1.62, max: 2.12 }, lengthRange: { min: 0.25, max: 0.32 } },
+            { name: '小夜', weightRange: { min: 1.62, max: 2.88 }, lengthRange: { min: 0.23, max: 0.3 } },
+            { name: '鲁花蕾', weightRange: { min: 1.65, max: 2.22 }, lengthRange: { min: 0.16, max: 0.18 } },
+            { name: '乖乖鹄', weightRange: { min: 1.66, max: 2.11 }, lengthRange: { min: 0.22, max: 0.27 } },
+            { name: '可立鸡', weightRange: { min: 1.66, max: 2.68 }, lengthRange: { min: 0.17, max: 0.22 } },
+            { name: '斑斑', weightRange: { min: 1.69, max: 2.46 }, lengthRange: { min: 0.2, max: 0.25 } },
+            { name: '奔波鼠', weightRange: { min: 1.77, max: 2.4 }, lengthRange: { min: 0.22, max: 0.3 } },
+            { name: '波波螺', weightRange: { min: 1.89, max: 2.23 }, lengthRange: { min: 0.15, max: 0.17 } },
+            { name: '矿晶石', weightRange: { min: 2.03, max: 2.33 }, lengthRange: { min: 0.23, max: 0.29 } },
+            { name: '小甲虫', weightRange: { min: 2.36, max: 2.64 }, lengthRange: { min: 0.2, max: 0.23 } },
+            { name: '多西', weightRange: { min: 2.42, max: 2.42 }, lengthRange: { min: 0.34, max: 0.34 } },
+            { name: '呼呼猪', weightRange: { min: 2.4, max: 3.52 }, lengthRange: { min: 0.22, max: 0.31 } },
+            { name: '雪娃娃', weightRange: { min: 2.45, max: 3.12 }, lengthRange: { min: 0.12, max: 0.17 } },
+            { name: '小鼠獭', weightRange: { min: 2.49, max: 2.82 }, lengthRange: { min: 0.17, max: 0.21 } },
+            { name: '古钟蛇', weightRange: { min: 2.5, max: 3.12 }, lengthRange: { min: 0.4, max: 0.46 } },
+            { name: '海盔虫', weightRange: { min: 2.62, max: 3.39 }, lengthRange: { min: 0.23, max: 0.29 } },
+            { name: '板板壳', weightRange: { min: 2.63, max: 4.17 }, lengthRange: { min: 0.23, max: 0.32 } },
+            { name: '灵狐', weightRange: { min: 2.68, max: 3.49 }, lengthRange: { min: 0.24, max: 0.33 } },
+            { name: '电咩咩', weightRange: { min: 2.8, max: 3.44 }, lengthRange: { min: 0.27, max: 0.33 } },
+            { name: '甜田螺', weightRange: { min: 2.9, max: 3.63 }, lengthRange: { min: 0.18, max: 0.24 } },
+            { name: '拉特', weightRange: { min: 2.93, max: 3.37 }, lengthRange: { min: 0.22, max: 0.25 } },
+            { name: '机械方方', weightRange: { min: 3.31, max: 3.67 }, lengthRange: { min: 0.2, max: 0.22 } },
+            { name: '雪豆丁', weightRange: { min: 3.34, max: 4.98 }, lengthRange: { min: 0.37, max: 0.51 } },
+            { name: '吸泥鸥', weightRange: { min: 3.45, max: 4.91 }, lengthRange: { min: 0.23, max: 0.29 } },
+            { name: '绿草精灵', weightRange: { min: 3.64, max: 3.97 }, lengthRange: { min: 0.35, max: 0.4 } },
+            { name: '小狮鹫', weightRange: { min: 4.2, max: 6.93 }, lengthRange: { min: 0.3, max: 0.42 } },
+            { name: '治愈兔', weightRange: { min: 4.26, max: 5.71 }, lengthRange: { min: 0.24, max: 0.34 } },
+            { name: '棋棋', weightRange: { min: 4.40, max: 5.3 }, lengthRange: { min: 0.17, max: 0.19 } },
+            { name: '锥尾羊', weightRange: { min: 4.7, max: 6.47 }, lengthRange: { min: 0.24, max: 0.34 } },
+            { name: '护主犬', weightRange: { min: 4.85, max: 6.75 }, lengthRange: { min: 0.27, max: 0.37 } },
+            { name: '风铃鲨', weightRange: { min: 5.2, max: 6.63 }, lengthRange: { min: 0.19, max: 0.24 } },
+            { name: '鸭吉吉', weightRange: { min: 5.55, max: 6.94 }, lengthRange: { min: 0.3, max: 0.3 } },
+            { name: '多多', weightRange: { min: 5.41, max: 7.31 }, lengthRange: { min: 0.2, max: 0.27 } },
+            { name: '火尾瓦特', weightRange: { min: 6.54, max: 8.34 }, lengthRange: { min: 0.27, max: 0.38 } },
+            { name: '胆小鳗鱼', weightRange: { min: 6.76, max: 10.65 }, lengthRange: { min: 0.33, max: 0.44 } },
+            { name: '小怂猫', weightRange: { min: 6.86, max: 8.93 }, lengthRange: { min: 0.25, max: 0.35 } },
+            { name: '布是石', weightRange: { min: 6.84, max: 12.78 }, lengthRange: { min: 0.18, max: 0.25 } },
+            { name: '白发懒人', weightRange: { min: 7.03, max: 9.31 }, lengthRange: { min: 0.31, max: 0.43 } },
+            { name: '大头骨龙', weightRange: { min: 7.17, max: 11.41 }, lengthRange: { min: 0.36, max: 0.4 } },
+            { name: '石肤蜥', weightRange: { min: 7.67, max: 13.4 }, lengthRange: { min: 0.21, max: 0.29 } },
+            { name: '伊雷龙', weightRange: { min: 9.59, max: 12.4 }, lengthRange: { min: 0.31, max: 0.37 } },
+            { name: '小星光', weightRange: { min: 9.62, max: 13.53 }, lengthRange: { min: 0.33, max: 0.44 } },
+            { name: '权杖-Ⅱ', weightRange: { min: 9.99, max: 13.94 }, lengthRange: { min: 0.19, max: 0.23 } },
+            { name: '电动长颈鹿', weightRange: { min: 10.45, max: 14.86 }, lengthRange: { min: 0.3, max: 0.42 } },
+            { name: '幽影树', weightRange: { min: 10.73, max: 14.47 }, lengthRange: { min: 0.28, max: 0.37 } },
+            { name: '水母', weightRange: { min: 11.20, max: 14.24 }, lengthRange: { min: 0.21, max: 0.28 } },
+            { name: '提塔', weightRange: { min: 13.88, max: 17.03 }, lengthRange: { min: 0.28, max: 0.31 } },
+            { name: '阿米亚特', weightRange: { min: 13.58, max: 19.15 }, lengthRange: { min: 0.24, max: 0.46 } },
+            { name: '里拉鳐', weightRange: { min: 14.29, max: 19.2 }, lengthRange: { min: 0.4, max: 0.46 } },
+            { name: '嘟嘟煲', weightRange: { min: 17.45, max: 22.31 }, lengthRange: { min: 0.28, max: 0.33 } },
+            { name: '锤头鹳', weightRange: { min: 18.58, max: 25.37 }, lengthRange: { min: 0.47, max: 0.63 } },
+            { name: '石石', weightRange: { min: 21.81, max: 29.84 }, lengthRange: { min: 0.15, max: 0.21 } },
+            { name: '海豹战士', weightRange: { min: 24.43, max: 34.48 }, lengthRange: { min: 0.27, max: 0.38 } },
+            { name: '恶魔狼', weightRange: { min: 26, max: 36.7 }, lengthRange: { min: 0.52, max: 0.73 } },
+            { name: '记忆石', weightRange: { min: 31.82, max: 44.33 }, lengthRange: { min: 0.41, max: 0.58 } }
+        ];
+
+        function predict() {
+            const weightInput = document.getElementById('weight').value;
+            const lengthInput = document.getElementById('length').value;
+            const errorDiv = document.getElementById('error');
+            const resultDiv = document.getElementById('result');
+            const resultHeader = document.getElementById('resultHeader');
+            const resultContent = document.getElementById('resultContent');
+
+            // 重置显示
+            errorDiv.classList.remove('show');
+            resultDiv.classList.remove('show');
+
+            // 验证输入
+            if (!weightInput || isNaN(parseFloat(weightInput)) || parseFloat(weightInput) < 0) {
+                showError('请输入有效的重量数值！');
+                return;
+            }
+
+            const weight = parseFloat(weightInput);
+            const length = lengthInput ? parseFloat(lengthInput) : null;
+
+            // 根据重量和尺寸匹配数据
+            let matchedCreatures = eggData.filter(creature => {
+                // 重量必须在范围内
+                if (weight < creature.weightRange.min || weight > creature.weightRange.max) {
+                    return false;
+                }
+                // 如果输入了长度，长度也必须在范围内
+                if (length !== null) {
+                    return length >= creature.lengthRange.min && length <= creature.lengthRange.max;
+                }
+                return true;
+            });
+
+            if (matchedCreatures.length === 0) {
+                showError('未找到匹配的精灵蛋数据，请检查输入！');
+                return;
+            }
+
+            // 显示结果
+            resultHeader.textContent = `🎉 可能孵化出 ${matchedCreatures.length} 种精灵`;
+
+            resultContent.innerHTML = matchedCreatures.map(creature => {
+                const imgUrl = `https://tse2.mm.bing.net/th?q=洛克王国+${encodeURIComponent(creature.name)}+精灵&w=150&h=150&c=7&rs=1&p=0&dpr=1&pid=1.7`;
+                return `
+                <div class="result-item">
+                    <img src="${imgUrl}" alt="${creature.name}" class="creature-img" onerror="this.src='https://via.placeholder.com/150x150?text='+this.alt">
+                    <div class="creature-details">
+                        <div class="name">${creature.name}</div>
+                        <div class="info">
+                            <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px; transform: rotate(-45deg);"><path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0Z"/><path d="m14.5 12.5 2-2"/><path d="m11.5 9.5 2-2"/><path d="m8.5 6.5 2-2"/><path d="m17.5 15.5 2-2"/></svg>尺寸: ${creature.lengthRange.min}-${creature.lengthRange.max}</span>
+                            <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><path d="M12 2a4 4 0 0 0-4 4v2H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2h-2V6a4 4 0 0 0-4-4zm0 2a2 2 0 0 1 2 2v2h-4V6a2 2 0 0 1 2-2z"/></svg>重量: ${formatWeightRange(creature.weightRange)}</span>
+                        </div>
+                        ${length !== null ? `<div class="range-badge">${checkLengthMatch(length, creature.lengthRange) ? '✓ 尺寸匹配' : '⚠️ 尺寸不匹配'}</div>` : ''}
+                    </div>
+                </div>
+            `}).join('');
+
+            resultDiv.classList.add('show');
+
+            // 滚动到结果区域
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function formatWeightRange(range) {
+            return `${range.min}g - ${range.max}g`;
+        }
+
+        function checkLengthMatch(inputLength, lengthRange) {
+            return inputLength >= lengthRange.min && inputLength <= lengthRange.max;
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+            errorDiv.classList.add('show');
+        }
+
+        // 支持回车键提交
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                predict();
+            }
+        });
+
+        // 滑块与输入框同步
+        const lengthInput = document.getElementById('length');
+        const lengthSlider = document.getElementById('lengthSlider');
+        const lengthValue = document.getElementById('lengthValue');
+        const weightInput = document.getElementById('weight');
+        const weightSlider = document.getElementById('weightSlider');
+        const weightValue = document.getElementById('weightValue');
+
+        // 尺寸滑块事件
+        lengthSlider.addEventListener('input', function() {
+            const value = parseFloat(this.value);
+            lengthInput.value = value;
+            lengthValue.textContent = value.toFixed(2);
+        });
+
+        lengthInput.addEventListener('input', function() {
+            const value = parseFloat(this.value) || 0;
+            lengthSlider.value = value;
+            lengthValue.textContent = value.toFixed(2);
+        });
+
+        // 重量滑块事件
+        weightSlider.addEventListener('input', function() {
+            const value = parseFloat(this.value);
+            weightInput.value = value;
+            weightValue.textContent = value.toFixed(3);
+        });
+
+        weightInput.addEventListener('input', function() {
+            const value = parseFloat(this.value) || 0;
+            weightSlider.value = value;
+            weightValue.textContent = value.toFixed(3);
+        });
+
+        // 初始化滑块值
+        lengthSlider.dispatchEvent(new Event('input'));
+        weightSlider.dispatchEvent(new Event('input'));
+    </script>
+</body>
+</html>

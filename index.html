@@ -39,7 +39,7 @@
         .header h1 {
             font-size: 2.2em;
             color: #ffffff;
-            -webkit-text-stroke: 2px #5c3a21;
+            -webkit-text-stroke: 1.5px #5c3a21;
             text-shadow: 4px 4px 0px rgba(92, 58, 33, 0.15);
             letter-spacing: 2px;
             margin-bottom: 10px;
@@ -73,15 +73,16 @@
         .card::before {
             content: '';
             position: absolute;
-            top: -12px;
+            top: -14px;
             left: 50%;
             transform: translateX(-50%) rotate(-2deg);
-            width: 100px;
-            height: 28px;
-            background-color: rgba(255, 255, 255, 0.7);
-            border: 2px dashed #5c3a21;
-            box-shadow: 1px 1px 3px rgba(0,0,0,0.05);
+            width: 110px;
+            height: 32px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 248, 248, 0.85) 100%);
+            border: 2.5px solid #5c3a21;
+            box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
             z-index: 2;
+            opacity: 0.95;
         }
 
         .input-group {
@@ -278,9 +279,10 @@
 
         .creature-img {
             width: 75px;
-            height: 75px;
+            max-width: 75px;
+            min-height: 75px;
             border-radius: 10px;
-            object-fit: cover;
+            object-fit: contain;
             border: 2px solid #5c3a21;
             background: #fff9c4;
             margin-left: 8px;
@@ -387,11 +389,11 @@
         }
 
         @media (max-width: 600px) {
-            .header h1 { font-size: 1.6em; }
+            .header h1 { font-size: 1.9em; -webkit-text-stroke: 1.2px #5c3a21; }
             .header p { font-size: 0.85em; padding: 5px 15px; }
             .card { padding: 18px; }
             .result-item { padding: 12px; gap: 12px; }
-            .creature-img { width: 65px; height: 65px; }
+            .creature-img { width: 65px; height: 65px; max-width: 65px; min-height: 65px; }
             .result-item .name { font-size: 1em; }
             .result-item .info span { font-size: 0.8em; padding: 5px 10px; }
             .btn-predict { font-size: 1em; padding: 12px 18px; }
@@ -610,7 +612,6 @@
                             <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px; transform: rotate(-45deg);"><path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0Z"/><path d="m14.5 12.5 2-2"/><path d="m11.5 9.5 2-2"/><path d="m8.5 6.5 2-2"/><path d="m17.5 15.5 2-2"/></svg>尺寸: ${creature.lengthRange.min}-${creature.lengthRange.max}</span>
                             <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><path d="M12 2a4 4 0 0 0-4 4v2H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2h-2V6a4 4 0 0 0-4-4zm0 2a2 2 0 0 1 2 2v2h-4V6a2 2 0 0 1 2-2z"/></svg>重量: ${formatWeightRange(creature.weightRange)}</span>
                         </div>
-                        ${length !== null ? `<div class="range-badge">${checkLengthMatch(length, creature.lengthRange) ? '✓ 尺寸匹配' : '⚠️ 尺寸不匹配'}</div>` : ''}
                     </div>
                 </div>
             `}).join('');

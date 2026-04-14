@@ -15,12 +15,19 @@
 
         body {
             font-family: 'PingFang SC', 'Microsoft YaHei', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #fbd84a 0%, #f9a826 100%);
+            background:
+                radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.25) 20%, transparent 20%),
+                radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.25) 20%, transparent 20%);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
+            background-image: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.35) 20%, transparent 20%);
+            background-color: linear-gradient(135deg, #fbd84a 0%, #f9a826 100%);
             min-height: 100vh;
             padding: 15px;
             color: #5c3a21;
             position: relative;
             overflow-x: hidden;
+            background-blend-mode: overlay;
         }
 
         .container {
@@ -135,12 +142,12 @@
 
         .slider-value {
             position: absolute;
-            top: -35px;
+            top: 25px;
             transform: translateX(-50%);
             font-size: 0.85em;
             color: #5c3a21;
             font-weight: 500;
-            background: #fff9c4;
+            background: rgba(255, 249, 196, 0.9);
             padding: 3px 8px;
             border-radius: 6px;
             border: 1px solid #5c3a21;
@@ -191,23 +198,23 @@
         .btn-predict {
             width: 100%;
             padding: 14px 24px;
-            background: linear-gradient(135deg, #8bc34a 0%, #7cb342 100%);
+            background: linear-gradient(135deg, #c5e1a5 0%, #aed581 100%);
             color: #ffffff;
-            border: 1.5px solid #33691e;
+            border: 1.5px solid #558b2f;
             border-radius: 16px;
             font-size: 1.15em;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.15s ease;
             margin-top: 12px;
-            box-shadow: 0 3px 0px #33691e, 0 6px 10px rgba(0,0,0,0.12);
-            text-shadow: 1px 1px 0px #33691e;
+            box-shadow: 0 3px 0px #558b2f, 0 6px 10px rgba(0,0,0,0.12);
+            text-shadow: 1px 1px 0px #558b2f;
         }
 
         .btn-predict:hover {
             transform: translateY(1px);
-            box-shadow: 0 2px 0px #33691e, 0 5px 8px rgba(0,0,0,0.12);
-            background: linear-gradient(135deg, #9ccc65 0%, #8bc34a 100%);
+            box-shadow: 0 2px 0px #558b2f, 0 5px 8px rgba(0,0,0,0.12);
+            background: linear-gradient(135deg, #dcedc8 0%, #c5e1a5 100%);
         }
 
         .btn-predict:active {
@@ -233,7 +240,7 @@
             text-align: center;
             margin-bottom: 18px;
             padding: 12px 20px;
-            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+            background: linear-gradient(135deg, #ffb74d 0%, #ff9800 100%);
             color: #ffffff;
             border-radius: 14px;
             font-size: 1.05em;
@@ -270,7 +277,7 @@
             left: 0;
             width: 10px;
             height: 100%;
-            background: linear-gradient(135deg, #ff7043 0%, #ff5722 100%);
+            background: linear-gradient(135deg, #ffab91 0%, #ff8a65 100%);
             border-right: 1.5px solid #5c3a21;
         }
 
@@ -325,12 +332,12 @@
         }
 
         .result-item .info span:first-child {
-            background: rgba(144, 202, 249, 0.4);
+            background: rgba(227, 242, 253, 0.4);
             margin-right: 4px;
         }
 
         .result-item .info span:last-child {
-            background: rgba(255, 183, 77, 0.4);
+            background: rgba(255, 243, 224, 0.4);
             margin-left: 4px;
         }
 
